@@ -2,20 +2,14 @@
 
 void PacketWriter::transmitPkg(MSG_TYPE type, uint8_t* buf, int len) {
     write(HDLC_DELIM);
+    for(int i = 0; i < len; i++) {
+        writeEscaped(buf[i]);
+    }
     uint16_t checksum = calcChecksum(buf, len);
     uint8_t *checksumPtr = (uint8_t*) &checksum;
-    write(checksumPtr[0]);
-    write(checksumPtr[1]);
-    for(int i = 0; i < len; i++) {
-        uint8_t c = buf[i];
-        if(c == HDLC_DELIM || c == HDLC_ESC) {
-            write(HDLC_ESC);
-            write(c ^ 0x20);
-        }
-        else {
-            write(c);
-        }
-    }
+    writeEscaped(checksumPtr[0]);
+    writeEscaped(checksumPtr[1]);
+    write(HDLC_DELIM);
 }
 
 // taken from https://github.com/brandondahler/retter/blob/master/Fletcher/fletcher16.c

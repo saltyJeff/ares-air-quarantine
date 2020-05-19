@@ -22,6 +22,15 @@ public:
     }
 protected:
     virtual void write(uint8_t c) = 0;
+    void writeEscaped(uint8_t c) {
+        if(c == HDLC_DELIM || c == HDLC_ESC) {
+            write(HDLC_ESC);
+            write(c ^ 0x20);
+        }
+        else {
+            write(c);
+        }
+    }
 private:
     uint16_t calcChecksum(uint8_t *buf, int len);
     void transmitPkg(MSG_TYPE type, uint8_t* buf, int len);

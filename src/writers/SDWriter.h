@@ -6,7 +6,7 @@
 
 class SDWriter: public PacketWriter, public Task {
 public:
-    SDWriter(TelemData *telem): Task("SD Card", 0), telem(telem) {
+    SDWriter(TelemData *telem): Task("SD Card", hzToMs(0.75)), telem(telem) {
         initAndChkStatus();
     }
     virtual void initAndChkStatus() {
@@ -15,14 +15,13 @@ public:
             return;
         }
         char filename[128];
-        int i;
         // seek the next available filename
-        for(i = 0; i < 10000; i++) {
+        // (probably a better way to do this deterministiclly)
+        int i = 0;
+        do {
             sprintf(filename, "rocketdata%d.bin", i);
-            if(!sd.exists(filename)) {
-                break;
-            }
-        }
+            i++;
+        } while(sd.exists(filename));
         if(!file.open(filename, O_CREAT | O_WRITE | O_TRUNC)) {
             status = BAD_RESPONSE;
             return;

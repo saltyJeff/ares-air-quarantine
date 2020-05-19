@@ -77,7 +77,10 @@ public:
     }
     // edit if your benchmarking task is different (you will need to do your own performance measurement inside)
     virtual void benchmark() {
-        exec();
+        stats.reset();
+        for(int i = 0; i < 15; i++) {
+            exec();
+        }
     }
     void statusString(char *str) {
         sprintf(str, "%s: %s (avg=%d\tmin=%lu\tmax=%lu)", name, statusDesc(status), (int)stats.average, stats.min, stats.max);
