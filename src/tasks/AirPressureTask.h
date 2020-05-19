@@ -5,7 +5,7 @@
 // implemented for the LPS22HB
 class AirPressureTask: public Task {
 public:
-    AirPressureTask(float *press, float *temp): Task("Altimeter", hzToMs(75)), press(press), temp(temp), baro(&Wire1) {
+    AirPressureTask(float *press, float *temp): Task("Altimeter", hzToMs(70)), press(press), temp(temp), baro(&Wire1) {
         Wire1.begin();
         initAndChkStatus();
     }

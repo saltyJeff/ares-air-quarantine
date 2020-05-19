@@ -18,6 +18,7 @@ public:
         imu.setupAccel(imu.LSM9DS1_ACCELRANGE_16G);
         imu.setupGyro(imu.LSM9DS1_GYROSCALE_500DPS);
         imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
+        imu.
         status = OK;
     }
 private:

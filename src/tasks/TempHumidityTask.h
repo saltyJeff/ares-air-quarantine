@@ -6,7 +6,7 @@
 // implemented for the HTS221
 class TempHumidityTask: public Task {
 public:
-    TempHumidityTask(float *temp, float *humidity): Task("Temp&Humidity", hzToMs(12.5)), temp(temp), humidity(humidity) {
+    TempHumidityTask(float *temp, float *humidity): Task("Temp&Humidity", hzToMs(12)), temp(temp), humidity(humidity) {
         initAndChkStatus();
     }
     virtual void initAndChkStatus() {
