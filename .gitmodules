@@ -19,6 +19,3 @@
 [submodule "lib/SdFat"]
 	path = lib/SdFat
 	url = https://github.com/greiman/SdFat
-[submodule "lib/SparkFun_LSM9DS1_Arduino_Library"]
-	path = lib/SparkFun_LSM9DS1_Arduino_Library
-	url = https://github.com/sparkfun/SparkFun_LSM9DS1_Arduino_Library
