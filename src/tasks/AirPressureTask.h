@@ -31,12 +31,13 @@ private:
     LPS22HBSensor baro;
     bool baroStatusOk(LPS22HBStatusTypeDef baroStatus) {
         if(baroStatus == LPS22HB_STATUS_OK) {
+            status = OK;
             return true;
         }
         else if(baroStatus == LPS22HB_STATUS_TIMEOUT) {
             status = NO_RESPONSE;
         }
-        else if(baroStatus == LPS22HB_STATUS_ERROR) {
+        else {
             status = BAD_RESPONSE;
         }
         return false;

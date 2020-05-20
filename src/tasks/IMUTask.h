@@ -1,45 +1,52 @@
 #pragma once
 #include <Task.h>
-#include <Adafruit_LSM9DS1.h>
+#include <SparkFunLSM9DS1.h>
+#include <LSM9DS1_Types.h>
 #include <Wire.h>
 
 // implemented for the LSM9DS1
 class IMUTask: public Task {
 public:
     IMUTask(Vector *accel, Vector *rot, Vector *mag): 
-        Task("IMU", hzToMs(200)), accel(accel), rot(rot), mag(mag), imu(&Wire1) {
+        Task("IMU", hzToMs(100)), accel(accel), rot(rot), mag(mag) {
         initAndChkStatus();
     }
     virtual void initAndChkStatus() {
-        if(!imu.begin()) {
+        if(!imu.begin(LSM9DS1_AG_ADDR(1), LSM9DS1_AG_ADDR(1), Wire1)) {
             status = NO_RESPONSE;
             return;
         }
-        imu.setupAccel(imu.LSM9DS1_ACCELRANGE_16G);
-        imu.setupGyro(imu.LSM9DS1_GYROSCALE_500DPS);
-        imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
-        imu.
+        imu.setAccelODR(accel_odr::XL_ODR_119);
+        imu.setGyroODR(gyro_odr::G_ODR_119);
+        imu.setMagODR(mag_odr::M_ODR_80);
+
+        imu.setAccelScale(accel_scale::A_SCALE_16G);
+        imu.setGyroScale(gyro_scale::G_SCALE_500DPS);
+        imu.setMagScale(mag_scale::M_SCALE_4GS);
         status = OK;
     }
 private:
     Vector *accel, *rot, *mag;
-    Adafruit_LSM9DS1 imu;
+    LSM9DS1 imu;
 protected:
     virtual void runExec() {
-        imu.read();
-        sensors_event_t a, m, g, temp;
-        if(!imu.getEvent(&a, &m, &g, &temp)) {
-            status = NO_RESPONSE;
-            return;
+        if(imu.accelAvailable()) {
+            imu.readAccel();
+            accel->x = imu.ax;
+            accel->y = imu.ay;
+            accel->z = imu.az;
         }
-        accel->x = a.acceleration.x;
-        accel->y = a.acceleration.y;
-        accel->z = a.acceleration.z;
-        rot->x = g.gyro.x;
-        rot->y = g.gyro.y;
-        rot->z = g.gyro.z;
-        mag->x = m.magnetic.x;
-        mag->y = m.magnetic.y;
-        mag->z = m.magnetic.z;
+        if(imu.gyroAvailable()) {
+            imu.readGyro();
+            rot->x = imu.gx;
+            rot->y = imu.gy;
+            rot->z = imu.gz;
+        }
+        if(imu.magAvailable()) {
+            imu.readMag();
+            mag->x = imu.mx;
+            mag->y = imu.my;
+            mag->z = imu.mz;
+        }
     }
 };

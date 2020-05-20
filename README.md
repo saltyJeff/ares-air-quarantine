@@ -3,12 +3,14 @@
 | Component | Model Number | Serial Protocol | Update Rate (hz) |
 |---|---|---|---|
 | MCU | Arduino BLE Sense 33 | N/A | N/A |
-| IMU (9-DOF) | ST LSM9DS1 | I2C | 80 |
+| IMU (9-DOF) | ST LSM9DS1 | I2C | 100ish |
 | Atmosphere Sensor | ST HTS221 | I2C | 12.5 |
 | Barometer | ST LPS22HB | I2C | 75 |
 | GPS | uBlox Neo | UART | 5 |
 | Radio | RFD 900X | UART | N/A |
 | SD Card | the really cheap ones you get at Microcenter | SPI | 4ms flush every 1 block (512 bytes) written |
+
+**NOTE: the MCU has 2 I2C buses. We only use second internal bus (Wire1)**
 
 ## Packet Format
 We use a variant of the HDLC framing scheme.
